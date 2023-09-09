@@ -8,7 +8,7 @@ services:
       - node.name=elasticsearch
       - discovery.type=single-node
       - bootstrap.memory_lock=true  
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
@@ -17,6 +17,11 @@ services:
       - esdata:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   logstash:
     image: docker.elastic.co/logstash/logstash:7.10.0
@@ -30,6 +35,11 @@ services:
       - 5000:5000
     depends_on:
       - elasticsearch
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.10.0
@@ -40,6 +50,11 @@ services:
       ELASTICSEARCH_URL: http://elasticsearch:9200
     depends_on:
       - elasticsearch
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   esdata:
